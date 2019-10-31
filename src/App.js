@@ -2,6 +2,21 @@ import React from 'react';
 import logo from './logo.svg';
 import './App.css';
 
+import gql from 'graphql-tag';
+import { Query } from 'react-apollo';
+
+const GET_POSTS = gql`
+  query GetPosts {
+    posts {
+      id
+      author
+      body
+    }
+  }
+`;
+
+
+
 function App() {
   return (
     <div className="App">
@@ -18,6 +33,18 @@ function App() {
         >
           Learn React
         </a>
+        <Query query={GET_POSTS}>
+          {({ loading, data }) => !loading && (
+            <div>
+                {data.posts.map(post => (
+                  <div key={post.id}>
+                    <p>{post.author}</p>
+                    <p>{post.body}</p>
+                  </div>
+                ))}
+            </div>
+          )}
+        </Query>
       </header>
     </div>
   );
